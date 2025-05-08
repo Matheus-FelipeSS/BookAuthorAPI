@@ -39,8 +39,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapGet("/", () =>
-    Results.Text("API de Autores e Livros está funcionando!", "text/plain", Encoding.UTF8)
-);
 
 app.Run();
