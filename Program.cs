@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 using WebApi8.Data;
 using WebApi8.Services.Autor;
 using WebApi8.Services.Livro;
@@ -38,6 +39,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapGet("/", () => "API de Autores e Livros está funcionando!");
+app.MapGet("/", () =>
+    Results.Text("API de Autores e Livros está funcionando!", "text/plain", Encoding.UTF8)
+);
 
 app.Run();
