@@ -5,7 +5,6 @@ using WebApi8.Services.Livro;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -16,11 +15,9 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
 });
 
-// Serviços
 builder.Services.AddScoped<IAutorinterface, AutorService>();
 builder.Services.AddScoped<ILivroInterface, LivroService>();
 
-// Conexão com o banco PostgreSQL (Neon)
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -28,17 +25,19 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 var app = builder.Build();
 
-// Pipeline
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+app.Urls.Add($"http://0.0.0.0:{port}");
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapGet("/", () => "API de Autores e Livros está funcionando!");
 
 app.Run();
